@@ -1,3 +1,5 @@
+@use '../../index.scss';
+
 .login-container {
     color: white;
     // width: 200px;
@@ -5,7 +7,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 90vh;
     
 
     form.form {
@@ -15,9 +17,20 @@
         justify-content: center;
         gap: 2rem;
         padding: 3rem 0rem;
-        background-color: var(--primary-color);
-        border-radius: 1rem;
+        // background-color: var(--primary-color);
+        background-color: index.$clr-grey-9;
+        border-radius: 0.5rem;
         width: 400px;
+
+        button.submit-btn {
+            background-color: var(--primary-color);
+            transition: all linear;
+
+            &:hover {
+                background-color: var(--primary-color);
+                opacity: 0.9;
+            }
+        }
 
         span {
 
@@ -27,11 +40,11 @@
                 
             }
 
-            .email {
+            #email {
                 // width: 80%;
                 // padding: 1rem;
                 // border-radius: 1rem;
-                border: none;
+                // border: none;
                 outline: none;
                 padding: 1rem;
                 padding-left: 3rem;
@@ -40,8 +53,8 @@
             }
 
             label {
-                color: red;
-                
+                color: black;
+                margin-top: -.5rem;
                 
             }
 

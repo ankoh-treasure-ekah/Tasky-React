@@ -16,3 +16,11 @@ export enum TaskDifficulty {
     MEDIUM = "MEDIUM",
     STANDARD = "STANDARD"
 }
+
+export enum inputErrors {
+    emailRequired= 'email required',
+    passwordRequired= 'password required',
+    usernameRequired= 'username required',
+    invalidemail= 'invalid email',
+    invalidPassword= 'Password must be a combination of lower-case, upper-case, numbers and at least 9 characters long'
+}
