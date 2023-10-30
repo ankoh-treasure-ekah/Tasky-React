@@ -29,6 +29,24 @@ const Signup = () => {
   const [usernameHelperText, setUsernameText] = useState('');
   const [username, setUsername] = useState('');
 
+  const [formValid, setFormValid] = useState(false);
+  const [firstRender, setFirstRender] = useState(true);
+
+
+
+  useEffect(() => {
+    console.log('called')
+    if(errorEmail || errorPassword || errorUsername || username=='' || email=='' || password==''){
+      console.log('error')
+      setFormValid(false);
+      return
+    }
+
+    if(firstRender == false)
+      setFormValid(true);
+
+  }, [email, password, username])
+
   const generatePass = () => {
     let pass = ''
     let strAlpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -94,6 +112,7 @@ const Signup = () => {
 
   //control and validate my email input for correct values
   const emailControl = (value) => {
+    setFirstRender(false)
     
     setEmail(value)
 
@@ -107,6 +126,7 @@ const Signup = () => {
 
   //making sure password meets a specific requirements
   const passwordControl = (value) => {
+    setFirstRender(false)
 
     setPassword(value)
 
@@ -118,6 +138,8 @@ const Signup = () => {
 
   //making sure user inputs a username and in future checking if it already exists
   const usernameControl = (value) => {
+    setFirstRender(false)
+
     setUsername(value)
     console.log(value, username)
     
@@ -203,7 +225,7 @@ const Signup = () => {
             }}
           />
 
-          <Button className='submit-btn' type='submit' variant='contained'>Sign up</Button>
+          <Button disabled={formValid ? false : true} className='submit-btn' type='submit' variant='contained'>Sign up</Button>
         </form>
       </div>
     </React.Fragment>

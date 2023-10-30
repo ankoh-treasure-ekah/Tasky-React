@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './login.scss'
 import { InputText } from 'primereact/inputtext';
 import TextField from '@mui/material/TextField';
@@ -18,15 +18,21 @@ const Login = () => {
   const [errorPassword, setPasswordError] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [formValid, setFormValid] = useState(false);
+  const [firstRender, setFirstRender] = useState(true);
 
-  //handles when the user leaves the input field without putting in correct value
-  // const inputErrors = {
-  //   emailRequired: 'email required',
-  //   passwordRequired: 'password required',
-  //   invalidemail: 'invalid email',
-  //   invalidPassword: 'Password must be a combination of lower-case, upper-case, numbers and at least 9 characters long'
+  useEffect(() => {
+    console.log('called')
+    if(errorEmail || errorPassword || email=='' || password==''){
+      console.log('error')
+      setFormValid(false);
+      return
+    }
 
-  // }
+    if(firstRender == false)
+      setFormValid(true);
+
+  }, [email, password])
 
   //function to set the error state of an input field(errortext and input error )
   const setError = (handle ,errorMessage, error) => {
@@ -36,8 +42,11 @@ const Login = () => {
       setEmailHelperText(errorMessage)
       return
     }
-    setPasswordError(error)
-    setPasswordHelperText(errorMessage)
+    if(handle == 'password') {
+      setPasswordError(error)
+      setPasswordHelperText(errorMessage)
+
+    }
 
   }
 
@@ -57,8 +66,8 @@ const Login = () => {
   //control and validate my email input for correct values
   const emailControl = (value) => {
     
+    setFirstRender(false)
     setEmail(value)
-
     //using regex to test for correct email
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -69,11 +78,12 @@ const Login = () => {
 
   const passwordControl = (value) => {
 
+    setFirstRender(false)
     setPassword(value)
 
     let re = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{8,}$/
 
-    {re.test(value) ? setError('', false) : setError('password',inputErrors.invalidPassword , true)}
+    {value.length>=1 ? setError('password', '', false) : setError('password',inputErrors.passwordRequired , true)}
 
   }
 
@@ -118,7 +128,7 @@ const Login = () => {
               style={{width: '70%'}}
             />
 
-            <Button disabled className='submit-btn' type='submit' variant='contained' color='error'>Submit</Button>
+            <Button disabled={formValid ? false : true} className='submit-btn' type='submit' variant='contained' color='error'>Login</Button>
             
           </form>
       </div>
