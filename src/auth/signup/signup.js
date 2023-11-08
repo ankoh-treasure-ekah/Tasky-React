@@ -10,11 +10,17 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import {inputErrors} from '../../constants/constants.enum'
+import {inputErrors} from '../../constants/constants.enum';
+import {auth, provider} from '../../config/firebase'
+import {signInWithPopup} from 'firebase/auth'
+import { signInEmPass } from '../../services/users/user-service'
+import { useNavigate } from 'react-router-dom'
 
 
 
 const Signup = () => {
+  
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   const [email, setEmail] = useState('');
@@ -149,8 +155,24 @@ const Signup = () => {
 
   
 
-  const handleSubmit = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log('submited')
     //firebase pending
+
+    const response = await signInEmPass({email, password});
+    setUsername('');
+    setEmail('');
+    setPassword('');
+    console.log(response.user);
+
+    {response.state && navigate('/dashboard')}
+    if (String(response.user).includes('auth/email-already-in-use')) {
+      alert('user exists');
+
+      return
+    }
+
   }
   // useEffect(() => {
   //   console.log(username, 'from useeff')
@@ -162,7 +184,7 @@ const Signup = () => {
       <Navbar />
 
       <div className="signup-container">
-        <form className="form">
+        <form className="form" onSubmit={(e) => handleSubmit(e)}>
 
           <TextField 
             variant='filled'

@@ -9,8 +9,13 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import KeyIcon from '@mui/icons-material/Key';
 import IconButton from '@mui/material/IconButton';
 import {inputErrors} from '../../constants/constants.enum'
+import { signInEmPass, login } from '../../services/users/user-service'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
+
+  const navigate = useNavigate();
+
 
   const [emailHelperText, setEmailHelperText] = useState('');
   const [passwordHelperText, setPasswordHelperText] = useState('');
@@ -87,8 +92,34 @@ const Login = () => {
 
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async (e) => {
     //firebase pending
+    e.preventDefault();
+
+    const response = await login({email, password})
+    setEmail('');
+    setPassword('');
+
+    console.log(response)
+    console.log(e.form)
+
+    {response.state && navigate('/dashboard')}
+
+    if(String(response.error).includes('auth/invalid-login-credentials'))
+    {
+  
+        console.log('user does not exist', (response).err);
+        alert('user does not exist');
+        
+        return
+    }
+
+    if(String(response.error).includes('auth/too-many-requests')) {
+      alert('max try attempts reached, account locked, try again later or change your password');
+    }
+
+    console.log('nothing')
+  
   }
 
   return (
@@ -96,7 +127,7 @@ const Login = () => {
       <Navbar />
       
       <div className='login-container'>
-          <form className="form" onSubmit={handleSubmit}>
+          <form className="form" onSubmit={(e) => handleSubmit(e)}>
             <TextField 
               InputProps={{
                 endAdornment: (<InputAdornment position='end'><AccountCircle /></InputAdornment>),
@@ -111,6 +142,7 @@ const Login = () => {
               label="email" 
               variant="filled" 
               style={{width: '70%'}}
+              value={email}
             />
 
             <TextField 
@@ -126,6 +158,7 @@ const Login = () => {
               label="password" 
               variant="filled" 
               style={{width: '70%'}}
+              value={password}
             />
 
             <Button disabled={formValid ? false : true} className='submit-btn' type='submit' variant='contained' color='error'>Login</Button>

@@ -6,10 +6,6 @@ const Footer = () => {
     const [year, _setYear] = useState(new Date().getFullYear().toString())
     const [name, _setName] = useState('Treasure.co');
 
-    useEffect(() => {
-        _setYear(new Date().getFullYear().toString())
-    })
-
   return (
     <footer class="footerContainer">
         <p>Copyright &copy; {name}  {year} all rights reserved </p>
