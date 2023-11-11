@@ -103,7 +103,7 @@ const Login = () => {
     console.log(response)
     console.log(e.form)
 
-    {response.state && navigate('/dashboard')}
+    {response.status && navigate('/dashboard')}
 
     if(String(response.error).includes('auth/invalid-login-credentials'))
     {

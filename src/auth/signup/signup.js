@@ -165,9 +165,10 @@ const Signup = () => {
     setEmail('');
     setPassword('');
     console.log(response.user);
+    console.log(response);
 
     {response.state && navigate('/dashboard')}
-    if (String(response.user).includes('auth/email-already-in-use')) {
+    if (String(response.error).includes('auth/email-already-in-use')) {
       alert('user exists');
 
       return
