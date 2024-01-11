@@ -1,59 +1,99 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './navbar.scss'
-import { Link } from 'react-router-dom';
-import { Button } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
+import CloseIcon from '@mui/icons-material/Close';
+import Button  from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 
-//contains code for our navbar and logic
+const Navbar = () => {
+    const [heightForNav, setHeightForNav] = useState(400);
+    const [showNav, setShowNav] = useState(false);
 
-const Navbar = ({user}) => {
-    let userImage = "";
-    let userName = "Treasure";
-    let userIn = user;
-    console.log(userIn);
+    const [nav_active_one, setActiveOne] = useState(true);
+
+    const [scrollHeight, setScrollHeight] = useState(window.scrollY)
+
+    const [showSideNav, setShowSideNav] = useState(false);
 
     useEffect(() => {
-        console.log(user)
-    }, [])
-    
-    // controls the sliding of our side-drawer in smaller screen sizes
-    const openDrawer = () => {
-        console.log('drawer')
-    }
+        window.addEventListener('scroll', (e)=> {
+            setScrollHeight(window.scrollY)
+
+        })
+
+        if(scrollHeight >= 200) {
+            setActiveOne(false);
+        }
+
+        if(scrollHeight >= heightForNav) {
+            setActiveOne(true);
+            setShowNav(true);
+        }
+
+    }, [scrollHeight])
 
   return (
-    <nav className='navbarWorks'>
-        <div className="logoNav">
-            <button className='btn menu-btn' onClick={openDrawer}>
-                menu
-            </button>
-            <h1><span id="portFolio">Tas</span>ky</h1>
-        </div>
-        {!userIn && <ul className="navLinks">
-            <li className="navItem"><Link to="/" className="navLink">Home</Link></li>
-            <li className="navItem"><a href="Contact" className="navLink">Contact</a></li>
-            <li className="navItem"><a href="About" className="navLink">About</a></li>
-            <li className="navItem"><a href="Portfolio" className="navLink">Portfolio</a></li>
-            <li className="navItem"><a href="notification" className="navLink">notification</a></li>
-        </ul>}
-        
-        {!userIn && <ul className="login-nav">
-            <li className='login btn-nobg'><Link to="/login">Login</Link></li>
-            <li className='sign-up btn-nobg'><Link to="/signup">Sign up</Link></li>
-            
-        </ul>}
-        
+    <React.Fragment>
 
-        <div className="user-pane">
-            <div className="userImage">
-                {/* <img src={userImage} alt="user" referrerPolicy='no-referrer'/> */}
-                {userImage ? <Avatar alt="Remy Sharp" src={userImage} /> : <Avatar>{user?.email.split('@')[0][0].toUpperCase()}</Avatar>}
-            </div>
-            {/* <button className="userImageFab">P</button> */}
-            <p className="user-name">{user?.email.split('@')[0]}</p>
-            <Button variant='contained'>Logout</Button>
+        <div className={showSideNav ? 'overlay-drop active' : 'overlay-drop'}>
+                        
+                        {/* <button className="overlay-closer" id="overlay-closer">
+                                <svg role="img" style={{height: "16px", width: "16px", color: 'white'}} width="16" height="16" viewBox="0 0 20 20" fill="none" stroke-width="1" stroke="#666666" xmlns="http://www.w3.org/2000/svg" class="mobile-menu-close-button"><g><title></title>
+                                    <path d="M15 5L5 15" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5 5L15 15" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>
+                        </button> */}
+                        <IconButton onClick={()=>setShowSideNav(false)} className='overlay-closer' aria-label='close' color='primary'><CloseIcon/></IconButton>
+                        <div className="side-links">
+                        <li className="nav-items">
+                            <a href="#contact">Contact us</a>
+                            {/* {window.scrollTo({scrollY: '100px', })} */}
+                        </li>
+                        {/* <li className="nav-items">
+                            <a href="#mission">Mission</a>
+                        </li> */}
+                        <li className="nav-items">
+                            <a href="#services">Services</a>
+                        </li>
+                        <li className="nav-items">
+                            <a href="#about">About us</a>
+                        </li>
+                        </div>
+        </div>         
+        <div className={showSideNav ? 'overlay-back-drop active' : 'overlay-back-drop'}>
         </div>
-    </nav>
+        <nav className={showNav ? 'nav-bar active' : 'nav-bar'} id={nav_active_one ? 'nav_bar' : 'active'}>
+            <div className="nav-wrapper">
+                <div className="left-nav" style={{display: 'flex'}}>   
+                    <button onClick={()=>{setShowSideNav(true);}} className="hamburger-menu" id="hamburger-menu">
+                                <svg role="img" width="20" height="30" viewBox="0 0 100 100" fill="var(--primary-color)" strokeWidth="1" stroke="white" xmlns="http://www.w3.org/2000/svg" className="burger-icon"><g><title></title>
+                                    <path d="M84.7,53.7H15.1c-2.1,0-3.8-1.7-3.8-3.8v0c0-2.1,1.7-3.8,3.8-3.8h69.7c2.1,0,3.8,1.7,3.8,3.8v0C88.6,52,86.9,53.7,84.7,53.7  z"></path>
+                                    <path d="M84.7,23.7H15.1c-2.1,0-3.8-1.7-3.8-3.8v0c0-2.1,1.7-3.8,3.8-3.8h69.7c2.1,0,3.8,1.7,3.8,3.8v0C88.6,22,86.9,23.7,84.7,23.7  z"></path>
+                                    <path d="M84.7,83.7H15.1c-2.1,0-3.8-1.7-3.8-3.8v0c0-2.1,1.7-3.8,3.8-3.8h69.7c2.1,0,3.8,1.7,3.8,3.8v0C88.6,82,86.9,83.7,84.7,83.7  z"></path></g>
+                                </svg>
+                    </button>
+                
+                   
+                    <div className="logo">
+                        <img src="8-removebg-preview.png" alt="logo" />
+                    </div>
+                </div>
+                <div className="nav-links">
+                    <li className="nav-items">
+                        <a href="#contact">Contact us</a>
+                        {/* {window.scrollTo({scrollY: '100px', })} */}
+                    </li>
+                    {/* <li className="nav-items">
+                        <a href="#mission">Mission</a>
+                    </li> */}
+                    <li className="nav-items">
+                        <a href="#services">Services</a>
+                    </li>
+                    <li className="nav-items">
+                        <a href="#about">About us</a>
+                    </li>
+                </div>
+            </div>
+        </nav>
+    </React.Fragment>
+
   )
 }
 

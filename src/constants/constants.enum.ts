@@ -22,5 +22,8 @@ export enum inputErrors {
     passwordRequired= 'password required',
     usernameRequired= 'username required',
     invalidemail= 'invalid email',
-    invalidPassword= 'Password must be a combination of lower-case, upper-case, numbers and at least 9 characters long'
+    invalidPassword= 'Password must be a combination of lower-case, upper-case, numbers and at least 9 characters long',
+    firstNameRequired='first name required',
+    lastNamerequired='last name required',
+    messageRequired='message required'
 }
